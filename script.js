@@ -15,7 +15,7 @@ function Gameboard() {
 
   // adding mark if the cell doesn't have a players markings
   const addMarkAt = (row, column, player) => {
-    if (board[row][column].getValue() !== 0) {
+    if (board[row][column].getValue() !== null) {
       console.log("Cell is already occupied");
       return false;
     }
@@ -28,14 +28,14 @@ function Gameboard() {
     const boardWithCellValues = board.map((row) =>
       row.map((cell) => cell.getValue())
     );
-    console.log(boardWithCellValues);
+    console.table(boardWithCellValues);
   };
 
   return { getBoard, addMarkAt, printBoard };
 }
 
 function Cell() {
-  let value = 0;
+  let value = null;
 
   // Accept a player's mark to change the value of the cell
   const addMark = (player) => {
@@ -128,8 +128,8 @@ function GameController(
     }
 
     //   for right diagonal
-    for (let i = 0; i < 0; i++) {
-      for (let j = 2; j >= 0; j--) {
+    for (let i = 0; i <= 0; i++) {
+      for (let j = 2; j >= 2; j--) {
         if (
           brd[i][j].getValue() === playerMark &&
           brd[i + 1][j - 1].getValue() === playerMark &&
@@ -147,7 +147,7 @@ function GameController(
     const brd = board.getBoard();
     for (let row of brd) {
       for (let cell of row) {
-        if (cell.getValue() === 0) {
+        if (cell.getValue() === null) {
           return false;
         }
       }
@@ -198,15 +198,53 @@ function GameController(
   };
 }
 
-const game = GameController();
-// game.playRound(0, 0);
-// game.playRound(1, 1);
-// game.playRound(2, 2);
-// game.playRound(0, 2);
-// game.playRound(2, 0);
-// game.playRound(1, 0);
-// game.playRound(1, 2);
-// game.playRound(1, 2);
-// game.playRound(2, 1);
-// game.playRound(1, 2);
-// game.playRound(0, 1);
+function ScreenController() {
+  const game = GameController();
+  const playerTurnDiv = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+
+  const updateScreen = () => {
+    // clear the board
+    boardDiv.textContent = "";
+
+    // get the newest version of the board and player turn
+    const board = game.getBoard();
+    const activePlayer = game.getActivePlayer();
+
+    // Display player's turn
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+
+    // Render board squares
+    board.forEach((row, i) => {
+      row.forEach((cell, j) => {
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("cell");
+
+        cellButton.dataset.row = i;
+        cellButton.dataset.column = j;
+        cellButton.textContent = cell.getValue();
+        boardDiv.appendChild(cellButton);
+      });
+    });
+  };
+
+  // Add event listener for the board
+  function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row;
+    const selectedColumn = e.target.dataset.column;
+    // Make sure I've clicked a column and not the gaps in between
+    if (!selectedColumn || !selectedRow) return;
+
+    game.playRound(selectedRow, selectedColumn);
+    updateScreen();
+    game.checkWinner();
+    if (game.checkWinner().isGameOver) {
+      boardDiv.removeEventListener("click", clickHandlerBoard);
+    }
+  }
+  boardDiv.addEventListener("click", clickHandlerBoard);
+
+  updateScreen();
+}
+
+ScreenController();
