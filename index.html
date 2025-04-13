@@ -13,11 +13,11 @@
 
         <!-- player 1 -->
         <label for="player1">player 1 Name</label>
-        <input type="text" id="player1" placeholder="player 1" />
+        <input type="text" id="player1" placeholder="player 1 (X)" />
 
         <!-- player 2 -->
         <label for="player2">player 1 Name</label>
-        <input type="text" id="player2" placeholder="player 2" />
+        <input type="text" id="player2" placeholder="player 2 (O)" />
 
         <button type="submit" id="startGame">Start Game</button>
       </form>
@@ -27,6 +27,7 @@
     <dialog id="winnerDialog">
       <h1 id="winnerMessage"></h1>
       <form method="dialog">
+        <button id="home">Home</button>
         <button id="playAgain">Play Again</button>
       </form>
     </dialog>
@@ -35,7 +36,7 @@
       <h1 class="turn"></h1>
       <div class="board"></div>
 
-      <button id="restartGame">Restart Game</button>
+      <button id="restartGame">Home</button>
     </div>
     <script src="script.js"></script>
   </body>

@@ -208,6 +208,7 @@ function ScreenController() {
   const introForm = document.querySelector("#introForm");
 
   const winnerDialog = document.querySelector("#winnerDialog");
+  const homeBtn = document.querySelector("#home");
   const playAgainBtn = document.querySelector("#playAgain");
   const winnerMessage = document.querySelector("#winnerMessage");
   const gameContainer = document.querySelector(".game-container");
@@ -279,7 +280,7 @@ function ScreenController() {
     boardDiv.addEventListener("click", clickHandlerBoard);
   });
 
-  playAgainBtn.addEventListener("click", () => {
+  homeBtn.addEventListener("click", () => {
     winnerDialog.close();
     introDialog.showModal();
 
@@ -287,10 +288,24 @@ function ScreenController() {
     document.querySelector("#player2").value = "";
   });
 
+  playAgainBtn.addEventListener("click", () => {
+    winnerDialog.close();
+
+    const player1Name = document.querySelector("#player1").value;
+    const player2Name = document.querySelector("#player2").value;
+    game = GameController(player1Name, player2Name);
+
+    gameContainer.style.display = "block";
+
+    updateScreen();
+
+    boardDiv.addEventListener("click", clickHandlerBoard);
+  });
+
   document.getElementById("restartGame").addEventListener("click", () => {
     gameContainer.style.display = "none";
     introDialog.showModal();
-    boardDiv.removeEventListener("click", clickHandlerEvent);
+    boardDiv.removeEventListener("click", clickHandlerBoard);
     document.getElementById("player1").value = "";
     document.getElementById("player2").value = "";
   });
