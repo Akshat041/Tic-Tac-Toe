@@ -199,9 +199,18 @@ function GameController(
 }
 
 function ScreenController() {
-  const game = GameController();
+  let game;
+
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
+
+  const introDialog = document.querySelector("#introDialog");
+  const introForm = document.querySelector("#introForm");
+
+  const winnerDialog = document.querySelector("#winnerDialog");
+  const playAgainBtn = document.querySelector("#playAgain");
+  const winnerMessage = document.querySelector("#winnerMessage");
+  const gameContainer = document.querySelector(".game-container");
 
   const updateScreen = () => {
     // clear the board
@@ -235,16 +244,56 @@ function ScreenController() {
     // Make sure I've clicked a column and not the gaps in between
     if (!selectedColumn || !selectedRow) return;
 
-    game.playRound(selectedRow, selectedColumn);
+    const roundResult = game.playRound(selectedRow, selectedColumn);
     updateScreen();
-    game.checkWinner();
-    if (game.checkWinner().isGameOver) {
+
+    if (roundResult.isGameOver) {
+      winnerMessage.textContent =
+        roundResult.winner === "Draw"
+          ? "It's a Draw!"
+          : `${roundResult.winner} Wins!`;
+
+      winnerDialog.showModal();
+      gameContainer.style.display = "none";
+
       boardDiv.removeEventListener("click", clickHandlerBoard);
     }
   }
-  boardDiv.addEventListener("click", clickHandlerBoard);
 
-  updateScreen();
+  introDialog.showModal();
+
+  introForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const player1Name = document.querySelector("#player1").value;
+    const player2Name = document.querySelector("#player2").value;
+
+    game = GameController(player1Name, player2Name);
+
+    introDialog.close();
+
+    gameContainer.style.display = "block";
+
+    updateScreen();
+
+    boardDiv.addEventListener("click", clickHandlerBoard);
+  });
+
+  playAgainBtn.addEventListener("click", () => {
+    winnerDialog.close();
+    introDialog.showModal();
+
+    document.querySelector("#player1").value = "";
+    document.querySelector("#player2").value = "";
+  });
+
+  document.getElementById("restartGame").addEventListener("click", () => {
+    gameContainer.style.display = "none";
+    introDialog.showModal();
+    boardDiv.removeEventListener("click", clickHandlerEvent);
+    document.getElementById("player1").value = "";
+    document.getElementById("player2").value = "";
+  });
 }
 
 ScreenController();
