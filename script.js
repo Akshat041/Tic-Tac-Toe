@@ -273,7 +273,8 @@ function ScreenController() {
 
     introDialog.close();
 
-    gameContainer.style.display = "block";
+    gameContainer.style.cssText =
+      "display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto";
 
     updateScreen();
 
@@ -295,7 +296,8 @@ function ScreenController() {
     const player2Name = document.querySelector("#player2").value;
     game = GameController(player1Name, player2Name);
 
-    gameContainer.style.display = "block";
+    gameContainer.style.cssText =
+      "display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto";
 
     updateScreen();
 
