@@ -57,18 +57,20 @@ function Cell() {
  */
 function GameController(
   playerOneName = "Player One",
-  playerTwoName = "Player Two"
+  playerTwoName = "Player Two",
+  playerOneImgSrc = "./img/cross.png",
+  playerTwoImgSrc = "./img/circle.png"
 ) {
   const board = Gameboard();
 
   const players = [
     {
       name: playerOneName,
-      marking: "X",
+      marking: `<img src = "${playerOneImgSrc}" alt = "X">`,
     },
     {
       name: playerTwoName,
-      marking: "O",
+      marking: `<img src = "${playerTwoImgSrc}" alt = "O">`,
     },
   ];
 
@@ -232,7 +234,7 @@ function ScreenController() {
 
         cellButton.dataset.row = i;
         cellButton.dataset.column = j;
-        cellButton.textContent = cell.getValue();
+        cellButton.innerHTML = cell.getValue() || "";
         boardDiv.appendChild(cellButton);
       });
     });
@@ -269,7 +271,12 @@ function ScreenController() {
     const player1Name = document.querySelector("#player1").value;
     const player2Name = document.querySelector("#player2").value;
 
-    game = GameController(player1Name, player2Name);
+    game = GameController(
+      player1Name,
+      player2Name,
+      "./img/cross.png",
+      "./img/circle.png"
+    );
 
     introDialog.close();
 
@@ -294,7 +301,12 @@ function ScreenController() {
 
     const player1Name = document.querySelector("#player1").value;
     const player2Name = document.querySelector("#player2").value;
-    game = GameController(player1Name, player2Name);
+    game = GameController(
+      player1Name,
+      player2Name,
+      "./img/cross.png",
+      "./img/circle.png"
+    );
 
     gameContainer.style.cssText =
       "display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto";
